@@ -1,7 +1,8 @@
+import { ConfigProvider } from 'antd'
+
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
-import Layout from './pages/Layout'
+import './index.scss'
 import reportWebVitals from './reportWebVitals'
 import { RouterProvider, Outlet } from 'react-router-dom'
 import router from './router'
@@ -9,11 +10,26 @@ import router from './router'
 import store from './store'
 import { Provider } from 'react-redux'
 
+import 'normalize.css'
+
+// import './theme.css'
+
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={ router }></RouterProvider>
+      <ConfigProvider theme={{
+        token: {
+          // Seed Token，影响范围大
+          colorPrimary: '#00b96b',
+          borderRadius: 2,
+
+          // 派生变量，影响范围小
+          colorBgContainer: '#f6ffed',
+        },
+        }}>
+        <RouterProvider router={ router }></RouterProvider>
+      </ConfigProvider>
     </Provider>
   </React.StrictMode>
 )

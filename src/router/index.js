@@ -1,6 +1,7 @@
 import App from '../App'
 
-import Layout from '../pages/Layout'
+import Layout from '@/pages/Layout'
+import Board from '@/pages/Board'
 
 import Article from '../pages/Article'
 import About from '../pages/About'
@@ -8,22 +9,23 @@ import Login from '../pages/Login'
 
 import NotFound from '../pages/NotFound'
 
+import AuthRoute from '@/components/AuthRoute'
 
-import { createBrowserRouter, /* createHashRouter */ } from 'react-router-dom'
+
+import { createBrowserRouter, /* createHashRouter, */ /* Navigate, 组件 */ } from 'react-router-dom'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: <AuthRoute><App /></AuthRoute>,
     children: [
       {
-        // path: 'app',
         index: true,
-        element: <App />
+        element: <Board />,
       },
       {
         path: 'about',
-        element: <About />
+        element: <About />,
       },
       {
         path: 'article',
