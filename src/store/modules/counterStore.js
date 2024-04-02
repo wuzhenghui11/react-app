@@ -35,10 +35,10 @@ console.log(newState) */
 
 export const { increment, decrement, incrementByAmount } = counterStore.actions
 
-export const asyncSetCount = (num = 20) => {
+export const asyncSetCount = (num = 10) => {
   return async (dispatch) => {
     const res = await Promise.resolve(num)
-    dispatch(asyncIncrementByAmount(res + 1))
+    dispatch(asyncIncrementByAmount(res))
   }
 }
 

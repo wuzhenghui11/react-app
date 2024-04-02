@@ -1,45 +1,43 @@
-import App from '../App'
-
-import Layout from '@/pages/Layout'
-import Board from '@/pages/Board'
-
-import Article from '../pages/Article'
-import About from '../pages/About'
-import Login from '../pages/Login'
-
-import NotFound from '../pages/NotFound'
-
-import AuthRoute from '@/components/AuthRoute'
-
-
+import { Suspense, lazy } from 'react'
 import { createBrowserRouter, /* createHashRouter, */ /* Navigate, 组件 */ } from 'react-router-dom'
+
+const App = lazy(() => import('../App'))
+
+const Layout = lazy(() => import('@/pages/Layout'))
+const Board = lazy(() => import('@/pages/Board'))
+
+const Article = lazy(() => import('@/pages/Article'))
+const About = lazy(() => import('@/pages/About'))
+const Login = lazy(() => import('@/pages/Login'))
+const NotFound = lazy(() => import('@/pages/NotFound'))
+const AuthRoute = lazy(() => import('@/components/AuthRoute'))
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <AuthRoute><App /></AuthRoute>,
+    element: <Suspense fallback={'加载中'}><AuthRoute><App /></AuthRoute></Suspense>,
     children: [
       {
         index: true,
-        element: <Board />,
+        element: <Suspense fallback={'加载中'}><Board /></Suspense>,
       },
       {
         path: 'about',
-        element: <About />,
+        element: <Suspense fallback={'加载中'}><About /></Suspense>,
       },
       {
         path: 'article',
-        element: <Article />,
+        element: <Suspense fallback={'加载中'}><Article /></Suspense>,
       },
     ]
   },
   {
     path: '/login',
-    element: <Login />,
+    element: <Suspense fallback={'加载中'}><Login /></Suspense>,
   },
   {
     path: '*',
-    element: <NotFound />,
+    element: <Suspense fallback={'加载中'}><NotFound /></Suspense>,
   }
 ])
 
