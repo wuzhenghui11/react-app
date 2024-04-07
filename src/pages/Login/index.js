@@ -7,11 +7,17 @@ import {
   forwardRef,
   useEffect,
   useMemo, /* 缓存计算结果 */
-  useCallback, /* 缓存函数 */
+  memo, /* 经过 memo 包裹生成的缓存组件 只有在 props 发生变化时才会重新渲染 */
+  useCallback, /* 缓存函数 函数时引用类型会触发子组件重新渲染 所以缓存函数不会触发重新渲染 */
 } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { increment, decrement, incrementByAmount, asyncSetCount } from '../../store/modules/counterStore.js'
+import {
+  increment,
+  decrement,
+  incrementByAmount,
+  asyncSetCount,
+} from '../../store/modules/counterStore.js'
 
 // 默认null
 const MsgContext = createContext(null)
@@ -48,11 +54,12 @@ const Input = forwardRef(function Input (props, ref) {
 })
 
 // 缓存计算
-function CalcComponent () {
+const MemoCalcComponent = memo(function CalcComponent () {
   const [count1, setCount1] = useState(0)
   const [count2, setCount2] = useState(0)
+  console.log('我改变了')
 
-  // 只有当 count1 发生改变事才会改变计算渲染 只有在 count1 发生变化时才会渲染
+  // 只有当 count1 发生改变事才会改变计算渲染 只有在 count1 发生变化时才会渲染 另外使子组件不重新渲染 如果子组件属性是引用类型
   const result = useMemo(() => {
     return count1 + count2
   }, [count1])
@@ -64,7 +71,7 @@ function CalcComponent () {
       {result}
     </p>
   )
-}
+})
 
 function Login () {
   const navigate = useNavigate()
@@ -148,7 +155,7 @@ function Login () {
         <Button type="text" onClick={onDecrementByAmountBtnClick}>decrementByAmount</Button>
         <Button onClick={onAsyncSetCountBtnClick}>asyncSetCount</Button>
 
-        <CalcComponent></CalcComponent>
+        <MemoCalcComponent></MemoCalcComponent>
 
         <p><Button type="primary" onClick={() => navigate('/article')}>go to articel</Button></p>
       </div>
