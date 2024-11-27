@@ -5,10 +5,11 @@ import {
   useRef,
   useContext,
   forwardRef,
-  useEffect,
+  useEffect, /* 1.依赖项为空 组件更新时会执行 2.空数组时 组件初始化会执行一次 3.不为空时 指定的依赖项更新时会执行 */
   useMemo, /* 缓存计算结果 */
   memo, /* 经过 memo 包裹生成的缓存组件 只有在 props 发生变化时才会重新渲染 */
   useCallback, /* 缓存函数 函数时引用类型会触发子组件重新渲染 所以缓存函数不会触发重新渲染 */
+  useReducer, /* 修改 state 的目的 通过 dispatch 修改state */
 } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -133,13 +134,21 @@ function Login () {
   }
 
   useEffect(() => {
+    console.log('组件更新时就会执行')
+  })
+
+  useEffect(() => {
     console.log('Input Changed')
+    // inputValue 更新时会执行
   }, [inputValue])
 
   useEffect(() => {
     // 会立即执行
     dispatch(asyncSetCount(0))
     console.log('Count changed')
+    return () => {
+      // 清楚副作用逻辑此处执行 比如清楚定时器
+    }
   }, [dispatch])
 
   return (
