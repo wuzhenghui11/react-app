@@ -11,6 +11,7 @@ function Layout () {
       <Button type="primary" onClick={() => navigate('/login')}>go to login</Button>
       <Button type="primary" onClick={() => navigate('/about')}>go to about</Button>
       <Button type="primary" onClick={() => navigate('/article')}>go to article</Button>
+      <Button type="primary" onClick={() => navigate('/learnReduxToolkitReduxReact')}>go to learnReduxToolkitReduxReact</Button>
       <Outlet/>
     </div>
   )

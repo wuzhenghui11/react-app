@@ -20,10 +20,12 @@ store.getState()
 
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from './modules/counterStore.js'
+import cc from './modules/learnRduxReact.js'
 
 const store = configureStore({
   reducer: {
     counter: counterReducer,
+    cc
   },
 })
 
