@@ -26,7 +26,7 @@ function LearnReduxTooltikReduxReact () {
       {count}
       <button onClick={() => dispatch(decrement1())}>increment</button>
       <button onClick={() => dispatch(setNumber(10))}>10</button>
-      { list.map((item) =><span>{ item }-</span>) }
+      { list.map((item) =><span key={item}>{ item }-</span>) }
     </div>
   )
 }

@@ -39,3 +39,5 @@ const Home = lazy(() => import('..file'))
 ## cdn 配置
 
 再去看文档
+
+jsconfig.json 给vscode用的

@@ -16,6 +16,7 @@ import 'normalize.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
+  // 严格模式 开发环境 钩子函数执行两次 生产不会 为了检测你的钩子函数是否合理的清除
   <React.StrictMode>
     <Provider store={store}>
       <ConfigProvider theme={{
