@@ -1,4 +1,4 @@
-import { Button } from 'antd'
+import { Form, Butto, Input, Checkbox, Button } from 'antd'
 import {
   useState,
   useRef,
@@ -10,6 +10,10 @@ import './Login.scss'
 function Login () {
   const navigate = useNavigate()
   const inputRef = useRef(null)
+
+  function reset () {
+    
+  }
 
   return (
     <div className="login-wrapper">
@@ -27,8 +31,8 @@ function Login () {
         initialValues={{
           remember: true,
         }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        // onFinish={onFinish}
+        // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
@@ -60,7 +64,8 @@ function Login () {
         <Form.Item name="remember" valuePropName="checked" label={null}>
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
-      <Button>重置</Button>
+      </Form>
+      <Button onClick={reset}>重置</Button>
       <Button type='primary' onClick={() => {navigate('/')}}>Login</Button>
     </div>
   )
