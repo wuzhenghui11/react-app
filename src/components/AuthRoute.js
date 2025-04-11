@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom'
 
 function AuthRoute ({ children }) {
   console.log('token =>', getToken())
-  if (true) {
+  if (getToken()) {
     return <>{ children }</>
   } else {
     return <Navigate to="/login" replace />

@@ -1,6 +1,7 @@
 import { useSearchParams } from 'react-router-dom'
 import { useState, useEffect, useRef, createContext, useContext } from 'react';
 
+// 跨层级 传值
 const MsgContext = createContext()
 
 function Duanluo (props) {
@@ -20,6 +21,7 @@ function Duanluo (props) {
 }
 
 function DuanluoOther (props) {
+  // 跨层级 传值
   const msgContext = useContext(MsgContext)
   return (
     <div style={{ textAlign: 'left', backgroundColor: 'yellow' }}>

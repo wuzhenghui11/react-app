@@ -30,6 +30,8 @@ const learnSlice = createSlice({
   }
 })
 
+console.dir(learnSlice);
+
 export const { increment1, decrement1, setNumber, setFeatchlist/*异步请求部分*/ } = learnSlice.actions
 
 // 异步 方法 里返回异步操作

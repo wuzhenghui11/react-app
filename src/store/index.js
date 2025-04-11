@@ -19,13 +19,16 @@ store.getState()
 // 模块组合
 
 import { configureStore } from '@reduxjs/toolkit'
+
+import userReducer from './user/userStore';
 import counterReducer from './modules/counterStore.js'
 import cc from './modules/learnRduxReact.js'
 
 const store = configureStore({
   reducer: {
     counter: counterReducer,
-    cc
+    user: userReducer,
+    cc,
   },
 })
 
