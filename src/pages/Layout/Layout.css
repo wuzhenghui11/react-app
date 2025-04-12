@@ -2,12 +2,24 @@
   display: flex;
   height: 100%;
 }
+.top-bar{
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  display: flex;
+  background-color: #001529;
+  height: 60px;
+}
 
 .nav {
+  overflow-y: auto;
   text-align: left;
-  border-right: 1px solid gray;
-  padding-right: 5px;
+  margin-top: 60px;
+  background-color: #001529;
 }
 .content {
-
+  width: 100%;
+  padding: 60px 10px;
 }
