@@ -1,8 +1,10 @@
-import { Button, Menu } from 'antd'
+import { Button, Menu, Popconfirm, message } from 'antd'
 // import { createContext, useState, useRef, useContext, forwardRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 import classNames from 'classnames'
+import { clearUserInfo } from '@/store/user/userStore';
+import { useDispatch } from 'react-redux';
 
 import './Layout.css'
 
@@ -31,6 +33,7 @@ const items = [
 
 function Layout () {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const type = 1
 
   function menuClick (item) {
@@ -39,11 +42,33 @@ function Layout () {
     navigate(path)
   }
 
+  const confirm = (e) => {
+    console.log(e);
+    dispatch(clearUserInfo())
+    navigate('/login')
+    message.success('Click on Yes');
+  };
+  const cancel = (e) => {
+    console.log(e);
+    message.error('Click on No');
+  };
+
   return (
     <div className="home">
       <div className="nav">
         <div className="top-bar">
-          <div className={classNames("nav-item", {active: type === 1})}><Button type="primary" onClick={() => navigate('/login')}>login</Button></div>
+          <div className={classNames("nav-item")}>
+            <Popconfirm
+              title="到登录"
+              description="确定要退出去登录页吗?"
+              onConfirm={confirm}
+              onCancel={cancel}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary">login</Button>
+            </Popconfirm>
+            </div>
           <div className={classNames("nav-item", {active: type === 1})}><Button type="primary" onClick={() => navigate('/')}>home</Button></div>
         </div>
         <Menu

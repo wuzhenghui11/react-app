@@ -32,7 +32,9 @@ function useToggle () {
   }
 }
 
-const Input = forwardRef(function Input (props, ref) {
+// 使用 ref暴露DOM 节点给父组件
+// 父组件通过ref获取到子组件内部的input元素 让其聚焦
+const InputComponent = forwardRef(function InputComponent (props, ref) {
   // 子组件接受的 Provider
   const msg = useContext(MsgContext)
   const { value, onChange } = props
@@ -43,7 +45,8 @@ const Input = forwardRef(function Input (props, ref) {
   }
   
   return (
-    <div>
+    <div style={{border: "1px solid gray"}}>
+      <h2>input 组件</h2>
       <p>Provider: {msg}</p>
       <input
         value={value}
@@ -54,7 +57,9 @@ const Input = forwardRef(function Input (props, ref) {
   )
 })
 
-// 缓存计算
+// react 组件默认的渲染机制：只要父组件重新渲染子组件就会重新渲染
+// 缓存计算 作用允许 Props 没有改变的情况下跳过渲染
+// 经过memo 包裹的生的组件只有在 count1 发生改变才会重新渲染
 const MemoCalcComponent = memo(function CalcComponent () {
   const [count1, setCount1] = useState(0)
   const [count2, setCount2] = useState(0)
@@ -67,8 +72,9 @@ const MemoCalcComponent = memo(function CalcComponent () {
 
   return (
     <p className="calc">
-      <Button type="primary" onClick={() => setCount1(count1 + 1)}>+1</Button>
-      <Button type="primary" onClick={() => setCount2(count2 + 1)}>+1</Button>
+      <Button type="primary" onClick={() => setCount1(count1 + 1)}>+1 memo组件 count1 有 useMomo</Button>-
+      {/* 点击count2 button 不会更新 */}
+      <Button type="primary" onClick={() => setCount2(count2 + 1)}>+1 memo组件 count2</Button>
       {result}
     </p>
   )
@@ -106,15 +112,18 @@ function Other () {
 
   const { boolean, toggle } = useToggle()
 
-  const getVal = (val) => {
+  const inputChange = (val) => {
     console.log(val)
     setInputValue(val)
     return val
   }
 
+  function changeIcon () {
+    toggle()
+  }
+
   function onIncrementBtnClick () {
     dispatch(increment())
-    toggle()
     // 修改 Provider 信息
     setMsg(`${msg}${count}:`)
     console.log(inputRef)
@@ -122,7 +131,6 @@ function Other () {
 
   function onDecrementBtnClick () {
     dispatch(decrement())
-    setInputValue(count)
   }
 
   function onDecrementByAmountBtnClick () {
@@ -133,12 +141,15 @@ function Other () {
     dispatch(asyncSetCount(20))
   }
 
+  // 1.没有依赖项 初始和组件更新
+  // 2.空数组 初始执行
+  // 3.特定的依赖项 初始和特定的依赖项
   useEffect(() => {
     console.log('组件更新时就会执行')
   })
 
   useEffect(() => {
-    console.log('Input Changed')
+    console.log('input Changed')
     // inputValue 更新时会执行
   }, [inputValue])
 
@@ -153,10 +164,15 @@ function Other () {
 
   return (
     <MsgContext.Provider value={msg}>
-      <div className="login-wrap">
-        <Input value={inputValue} onChange={getVal} ref={inputRef}></Input>
-        <p>input:{inputValue}</p>
-        <p>toggle:{boolean ? '✔️' : '❎'}</p>
+      <div>
+        <div>
+          <InputComponent value={inputValue} onChange={inputChange} ref={inputRef}></InputComponent>
+          input:{inputValue}
+        </div>
+        <p></p>
+        <p><Button type="primary" onClick={toggle}>toggle</Button>{boolean ? "✔️" : "❎"}</p>
+
+
         <p>{count}</p>
 
         <Button type="primary" onClick={onIncrementBtnClick}>increment</Button>
@@ -165,8 +181,6 @@ function Other () {
         <Button onClick={onAsyncSetCountBtnClick}>asyncSetCount</Button>
 
         <MemoCalcComponent></MemoCalcComponent>
-
-        <p><Button type="primary" onClick={() => navigate('/article')}>go to articel</Button></p>
       </div>
     </MsgContext.Provider>
   )
