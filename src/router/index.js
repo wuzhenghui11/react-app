@@ -11,7 +11,10 @@ const About = lazy(() => import('@/pages/About'))
 const Login = lazy(() => import('@/pages/Login'))
 const ReduxToolkitReduxReact = lazy(() => import('@/pages/Learn/ReduxToolkitReduxReact'))
 const SearchParamsParams = lazy(() => import('@/pages/Learn/SearchParamsParams.js'))
-const Other = lazy(() => import('@/pages/Learn/Other.js'))
+const MemoForwardRef = lazy(() => import('@/pages/Learn/MemoForwardRef.js'))
+const UseCallback = lazy(() => import('@/pages/Learn/UseCallback.js'))
+const UseReducer = lazy(() => import('@/pages/Learn/UseReducer.js'))
+const UseInperativeHandle = lazy(() => import('@/pages/Learn/UseInperativeHandle.js'))
 
 
 const NotFound = lazy(() => import('@/pages/NotFound'))
@@ -45,9 +48,21 @@ const router = createBrowserRouter([
         element: <SearchParamsParams />,
       },
       {
-        path: 'Other',
-        element: <Other />
-      }
+        path: 'memoForwardRef',
+        element: <MemoForwardRef />
+      },
+      {
+        path: 'useCallback',
+        element: <UseCallback />
+      },
+      {
+        path: 'useReducer',
+        element: <UseReducer />
+      },
+      {
+        path: 'useInperativeHandle',
+        element: <UseInperativeHandle />
+      },
     ]
   },
   {

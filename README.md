@@ -44,3 +44,7 @@ jsconfig.json 给vscode用的
 
 ## 包体积查看优化
 source-map-explorer
+
+## 轻量级的 store
+zustand
+

@@ -43,10 +43,11 @@ const InputComponent = forwardRef(function InputComponent (props, ref) {
     // 执行 父组件的时间并传值
     onChange(e.target.value)
   }
+  console.log('我InputComponent 重新渲染了')
   
   return (
     <div style={{border: "1px solid gray"}}>
-      <h2>input 组件</h2>
+      <h2>Input 组件</h2>
       <p>Provider: {msg}</p>
       <input
         value={value}
@@ -58,12 +59,16 @@ const InputComponent = forwardRef(function InputComponent (props, ref) {
 })
 
 // react 组件默认的渲染机制：只要父组件重新渲染子组件就会重新渲染
-// 缓存计算 作用允许 Props 没有改变的情况下跳过渲染
-// 经过memo 包裹的生的组件只有在 count1 发生改变才会重新渲染
-const MemoCalcComponent = memo(function CalcComponent () {
+// 
+/* 
+  缓存计算 作用允许 Props 没有改变的情况下跳过渲染，pp（基本类型）没有变则子组件不会重新渲染。如果属性是引用类型，子组件也会变(对比的是引用地址)
+  要想属性为引用类型时 子组件不变则用 useMemo 包裹 产生一个不变的属性。方法则是useCallback
+*/
+// 经过memo 包裹的的组件只有在 count1 发生改变才会重新渲染
+const MemoCalcComponent = memo(function CalcComponent ({pp}) {
   const [count1, setCount1] = useState(0)
   const [count2, setCount2] = useState(0)
-  console.log('我改变了')
+  console.log('我子组件改变了')
 
   // 只有当 count1 发生改变事才会改变计算渲染 只有在 count1 发生变化时才会渲染 另外使子组件不重新渲染 如果子组件属性是引用类型
   const result = useMemo(() => {
@@ -71,34 +76,19 @@ const MemoCalcComponent = memo(function CalcComponent () {
   }, [count1])
 
   return (
-    <p className="calc">
-      <Button type="primary" onClick={() => setCount1(count1 + 1)}>+1 memo组件 count1 有 useMomo</Button>-
+    <div className="calc">
+      <h2>memo方法包裹的组件</h2>
+      <Button type="primary" onClick={() => setCount1(count1 + 1)}>+1 count1 有 useMomo 会计算渲染</Button>-
       {/* 点击count2 button 不会更新 */}
-      <Button type="primary" onClick={() => setCount2(count2 + 1)}>+1 memo组件 count2</Button>
-      {result}
-    </p>
+      <Button type="primary" onClick={() => setCount2(count2 - 1)}>+1 count2 不会重新渲染子组件</Button>
+      {result} -- {pp}
+    </div>
   )
 })
 
-function Other () {
+function MemoForwardRef () {
   const navigate = useNavigate()
-  const inputRef = useRef(null)
-
-  /* function reducer (state, action) {
-    switch (action.type) {
-      case '1':
-        return state + 1
-      case '2':
-        return state + 2
-      case '3':
-        return action.payload
-      default:
-        return state
-    }
-  }
-  // 组件中掉用 返回 [state, dispatch]
-  // dispath({type: '1'}) 通知 reducer 产生一个新的状态 使用这个新状态更新UI
-  const [state, dispatch] = useReducer(reducer, 0) */
+  const InputComponentRef = useRef(null)
 
   const count = useSelector((state) => {
     console.log(state)
@@ -106,27 +96,43 @@ function Other () {
   })
   const dispatch = useDispatch()
 
-  const [inputValue, setInputValue] = useState('子传父')
+  const [inputValue, setInputValue] = useState('')
+
   // Provider 的信息
   const [msg, setMsg] = useState('hello')
 
   const { boolean, toggle } = useToggle()
 
+  // list 放在组件外，子组件也不会重新渲染 说明每次父组件重新渲染 导致引用也变了
+  // const list = [1, 2, 3]
+  // 使用 useMemo 包裹 子组件也不会重新渲染
+  const list = useMemo(() => {
+    return [1, 2, 3]
+  }, [])
+  
   const inputChange = (val) => {
     console.log(val)
     setInputValue(val)
     return val
   }
 
-  function changeIcon () {
+  const changeIcon = () => {
     toggle()
+  }
+
+  const seInputComponentFocus = () => {
+    console.dir(InputComponentRef);
+    InputComponentRef.current.focus()
+  }
+
+  function setProviderMsg () {
+    // 修改 Provider 信息
+    setMsg(`${msg}${count}`)
   }
 
   function onIncrementBtnClick () {
     dispatch(increment())
-    // 修改 Provider 信息
-    setMsg(`${msg}${count}:`)
-    console.log(inputRef)
+    console.log(InputComponentRef)
   }
 
   function onDecrementBtnClick () {
@@ -145,7 +151,7 @@ function Other () {
   // 2.空数组 初始执行
   // 3.特定的依赖项 初始和特定的依赖项
   useEffect(() => {
-    console.log('组件更新时就会执行')
+    console.log('父组件更新时就会执行')
   })
 
   useEffect(() => {
@@ -166,24 +172,28 @@ function Other () {
     <MsgContext.Provider value={msg}>
       <div>
         <div>
-          <InputComponent value={inputValue} onChange={inputChange} ref={inputRef}></InputComponent>
+          <Button onClick={setProviderMsg}>修改Provider信息</Button>
+          <InputComponent value={inputValue} onChange={inputChange} ref={InputComponentRef}></InputComponent>
           input:{inputValue}
         </div>
-        <p></p>
+        <Button onClick={seInputComponentFocus}>InputComponent获得焦点</Button>
+
         <p><Button type="primary" onClick={toggle}>toggle</Button>{boolean ? "✔️" : "❎"}</p>
 
-
         <p>{count}</p>
-
-        <Button type="primary" onClick={onIncrementBtnClick}>increment</Button>
-        <Button onClick={onDecrementBtnClick}>decrement</Button>
-        <Button type="text" onClick={onDecrementByAmountBtnClick}>decrementByAmount</Button>
-        <Button onClick={onAsyncSetCountBtnClick}>asyncSetCount</Button>
-
-        <MemoCalcComponent></MemoCalcComponent>
+        <div>
+          <h2>ReduxTooltikReduxReact</h2>
+          <Button type="primary" onClick={onIncrementBtnClick}>increment</Button>
+          <Button onClick={onDecrementBtnClick}>decrement</Button>
+          <Button type="text" onClick={onDecrementByAmountBtnClick}>decrementByAmount</Button>
+          <Button onClick={onAsyncSetCountBtnClick}>asyncSetCount</Button>
+        </div>
+        {/* 缓存值时不会重新渲染
+         */}
+        <MemoCalcComponent pp={count}></MemoCalcComponent>
       </div>
     </MsgContext.Provider>
   )
 }
 
-export default Other
+export default MemoForwardRef

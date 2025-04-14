@@ -23,11 +23,23 @@ const items = [
   },
   {
     key: '/searchParamsParams/1001?aa=12',
-    label: 'searchParamsParams',
+    label: 'searchParams和Params',
   },
   {
-    key: '/other',
-    label: 'other',
+    key: '/MemoForwardRef',
+    label: 'memo和forwardRef',
+  },
+  {
+    key: '/useCallback',
+    label: 'useCallback',
+  },
+  {
+    key: '/useReducer',
+    label: 'useReducer',
+  },
+  {
+    key: '/useInperativeHandle',
+    label: 'useInperativeHandle',
   },
 ]
 
